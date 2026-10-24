@@ -33,8 +33,9 @@ export function createController(api) {
     }
     if (action === 'tabs.create') {
       if (!/^https?:\/\//.test(command.url || '')) throw new Error('An HTTP(S) URL is required');
-      const tab = await api.tabs.create({ url: command.url, active: true });
+      const tab = await api.tabs.create({ url: 'about:blank', active: true });
       await groupTab(tab.id);
+      await api.tabs.update(tab.id, { url: command.url });
       return { tabId: tab.id };
     }
     if (action === 'tabs.adopt') {
@@ -82,7 +83,7 @@ export function createController(api) {
         return { ok: true };
       }, [action, command.ref, command.selector, command.value]);
     }
-    if (action === 'page.scroll') return inject(tabId, (x, y) => { window.scrollBy(x, y); return { x: scrollX, y: scrollY }; }, [command.x || 0, command.y || 600]);
+    if (action === 'page.scroll') return inject(tabId, (x, y) => { window.scrollBy(x, y); return { x: scrollX, y: scrollY }; }, [command.x ?? 0, command.y ?? 600]);
     if (action === 'page.evaluate') {
       const result = await cdp(tabId, 'Runtime.evaluate', { expression: command.expression, awaitPromise: true, returnByValue: true });
       if (result.exceptionDetails) throw new Error(result.exceptionDetails.text || 'Page evaluation failed');

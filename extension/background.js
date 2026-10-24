@@ -57,7 +57,7 @@ chrome.tabs.onCreated.addListener(async tab => {
   try {
     const parent = await chrome.tabs.get(tab.openerTabId);
     if (parent.groupId < 0 || (await chrome.tabGroups.get(parent.groupId)).title !== 'AI') return;
-    await chrome.tabs.group({ tabIds: [tab.id], groupId: parent.groupId });
+    await execute({ action: 'tabs.adopt', tabId: tab.id });
   } catch { /* The opener may have closed. */ }
 });
 connect();
