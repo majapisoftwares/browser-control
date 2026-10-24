@@ -16,9 +16,12 @@ export function createController(api) {
     return tab;
   }
   async function cdp(tabId, method, params = {}) {
-    try { await api.debugger.attach({ tabId }, '1.3'); }
-    catch (error) { if (!String(error.message).includes('Already attached')) throw error; }
-    return api.debugger.sendCommand({ tabId }, method, params);
+    try { return await api.debugger.sendCommand({ tabId }, method, params); }
+    catch (error) {
+      if (!/not attached/i.test(error.message)) throw error;
+      await api.debugger.attach({ tabId }, '1.3');
+      return api.debugger.sendCommand({ tabId }, method, params);
+    }
   }
   async function inject(tabId, func, args = []) {
     const results = await api.scripting.executeScript({ target: { tabId }, func, args });
@@ -81,7 +84,7 @@ export function createController(api) {
           node.dispatchEvent(new Event('change', { bubbles: true }));
         }
         return { ok: true };
-      }, [action, command.ref, command.selector, command.value]);
+      }, [action, command.ref ?? null, command.selector ?? null, command.value ?? null]);
     }
     if (action === 'page.scroll') return inject(tabId, (x, y) => { window.scrollBy(x, y); return { x: scrollX, y: scrollY }; }, [command.x ?? 0, command.y ?? 600]);
     if (action === 'page.evaluate') {

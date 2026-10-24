@@ -44,3 +44,31 @@ test('new tabs reuse AI and unsupported URLs do not navigate or create tabs', as
   await assert.rejects(f.execute({ action: 'tabs.navigate', tabId: 1, url: 'javascript:alert(1)' }), /HTTP/);
   await assert.rejects(f.execute({ action: 'tabs.create', url: 'chrome://settings' }), /HTTP/);
 });
+
+test('DOM commands pass serializable optional arguments to Chrome', async () => {
+  const f = fixture();
+  await f.execute({ action: 'tabs.adopt', tabId: 1 });
+  // Chrome rejects undefined inside executeScript.args, unlike JSON.stringify.
+  const api = {
+    tabs: { get: async () => ({ groupId: 10 }) },
+    tabGroups: { get: async () => ({ title: 'AI' }) },
+    scripting: { executeScript: async ({ args }) => { assert.deepEqual(args, ['page.click', 4, null, null]); return [{ result: { ok: true } }]; } },
+  };
+  assert.deepEqual(await createController(api)({ action: 'page.click', tabId: 1, ref: 4 }), { ok: true });
+});
+
+test('debugger commands reuse this extension attachment and attach only when needed', async () => {
+  let attached = false;
+  let attaches = 0;
+  const api = {
+    tabs: { get: async () => ({ groupId: 10 }) }, tabGroups: { get: async () => ({ title: 'AI' }) },
+    debugger: {
+      attach: async () => { attaches++; attached = true; },
+      sendCommand: async () => { if (!attached) throw new Error('Debugger is not attached to the tab'); return { result: { value: 'ok' } }; },
+    },
+  };
+  const execute = createController(api);
+  assert.equal(await execute({ action: 'page.evaluate', tabId: 1, expression: 'document.title' }), 'ok');
+  assert.equal(await execute({ action: 'page.evaluate', tabId: 1, expression: 'document.title' }), 'ok');
+  assert.equal(attaches, 1);
+});
