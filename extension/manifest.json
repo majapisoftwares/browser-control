@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Majapi Browser Control",
+  "version": "0.1.0",
+  "minimum_chrome_version": "120",
+  "description": "Local agent control of signed-in Chrome, with automated tabs visibly grouped as AI.",
+  "permissions": ["tabs", "tabGroups", "scripting", "storage", "alarms", "debugger"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "action": { "default_title": "Majapi Browser Control", "default_popup": "popup.html" }
+}

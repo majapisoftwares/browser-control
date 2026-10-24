@@ -1,0 +1,4 @@
+node_modules/
+extension/config.local.json
+artifacts/
+*.log
