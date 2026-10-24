@@ -64,3 +64,10 @@ For transport retries reuse the command's original `id`; never give a mutation
 with an unknown outcome a new ID. The live bridge deduplicates recent request
 IDs. This history does not survive bridge restarts. Inspect current state after
 timeouts or disconnects. Verify the requested result before reporting completion.
+
+Track the IDs of every tab you create. When the task finishes, close those tabs
+with `tabs.close`, including tabs opened during failed attempts. Keep a tab open
+only when the user explicitly wants it for a handoff, such as choosing repositories.
+Do not close pre-existing user tabs or another agent's tabs merely because they
+are in AI. Use `tabs.list` at the end to verify that your task-created tabs were
+closed and report any intentional handoff tab.
