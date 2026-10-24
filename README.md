@@ -61,6 +61,8 @@ information bar. Disable the extension or stop the bridge to disconnect agents.
 npm test
 ```
 
-Tests cover bridge authentication/origin checks, command forwarding and
-deduplication, disconnect handling, and enforcement of AI grouping. Real-browser
-validation is pending until the user installs the extension.
+Eight tests cover bridge authentication/origin checks, command forwarding and
+deduplication, disconnect handling, AI grouping, serializable DOM arguments, and
+debugger attachment reuse. Live Chrome validation exercised tab creation in AI,
+signed-in GitHub navigation, DOM snapshots, screenshots, and the local Majapi UI
+and Cloud pages. Reload the extension after updating its source files.

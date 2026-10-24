@@ -1,6 +1,6 @@
 {
   "name": "@majapisoftwares/browser-control",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "description": "Harness-independent Chrome automation with visible AI tab groups",
@@ -11,9 +11,13 @@
     "setup": "node scripts/setup.mjs",
     "start": "node bridge/server.mjs",
     "test": "node --test test/*.test.mjs",
-    "browser": "node cli/browser.mjs"
+    "browser": "node cli/browser.mjs",
+    "generate:icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "ws": "8.22.0"
+  },
+  "devDependencies": {
+    "sharp": "0.35.5"
   }
 }
