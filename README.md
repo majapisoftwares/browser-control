@@ -9,30 +9,32 @@ Inspired by [Forge Chrome Extension](https://github.com/majapisoftwares/forge-ch
 Its Manifest V3 service-worker structure is the starting point. This project
 controls the actual signed-in tabs instead of exporting cookies to Forge.
 
-## Install locally
+## Install
 
 Requires Node 22+ and Chrome 120+.
 
 ```powershell
-npm ci
-npm run setup
+npx majapi-browser setup
 ```
 
-Load the `extension` directory using **Load unpacked** at `chrome://extensions`.
-Chrome asks for the declared permissions when you install it. The local setup
-generates a credential, prepares the extension, installs the skill in both
-`~/.agents/skills/browser-control` and `~/.codex/skills/browser-control`, and starts
-the local bridge without a terminal window. After a PC restart, run `npm run setup`
-again, or keep `npm start` running. No Chrome remote-debugging port is needed.
+Setup generates a bridge credential, copies the extension to
+`~/.browser-control/extension`, installs the skill in `~/.agents/skills` and
+`~/.codex/skills`, and starts the local bridge in the background. Load that folder
+once with **Load unpacked** at `chrome://extensions`. No Chrome remote-debugging
+port is needed.
 
 ```powershell
-node cli/browser.mjs status
-node cli/browser.mjs --file command.json
+npx majapi-browser start    # after a restart; the popup shows this when offline
+npx majapi-browser status
+npx majapi-browser stop
+npx majapi-browser command '{"action":"tabs.list"}'
 ```
 
+From a checkout, `npm ci` then `npm run setup` does the same.
+
 The extension badge shows **ON** when connected. **OFF** means the bridge is
-offline; **SET** means local setup is missing. Keep `extension/config.local.json`
-and `~/.browser-control/config.json` private. Neither is committed. Run setup
+offline; **SET** means local setup is missing. Keep `config.local.json` and
+`~/.browser-control/config.json` private. Neither is committed. Run setup
 again if you move the extension folder or change its bridge credential.
 
 ## Agent access

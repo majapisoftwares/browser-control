@@ -1,14 +1,28 @@
 {
-  "name": "@majapisoftwares/browser-control",
-  "version": "0.1.1",
-  "private": true,
-  "type": "module",
+  "name": "majapi-browser",
+  "version": "0.2.0",
   "description": "Harness-independent Chrome automation with visible AI tab groups",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/majapisoftwares/browser-control.git"
+  },
+  "bin": {
+    "majapi-browser": "cli/majapi-browser.mjs"
+  },
+  "files": [
+    "bridge",
+    "cli",
+    "extension",
+    "skill",
+    "!extension/config.local.json"
+  ],
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "setup": "node scripts/setup.mjs",
+    "setup": "node cli/majapi-browser.mjs setup",
     "start": "node bridge/server.mjs",
     "test": "node --test test/*.test.mjs",
     "browser": "node cli/browser.mjs",

@@ -2,7 +2,8 @@ import http from 'node:http';
 import { timingSafeEqual } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import { WebSocketServer, WebSocket } from 'ws';
-import { ensureConfig } from './config.mjs';
+import { writeFileSync, rmSync } from 'node:fs';
+import { ensureConfig, pidPath } from './config.mjs';
 
 export function createBridge({ token, timeout = 30_000 }) {
   let browser;
@@ -91,5 +92,12 @@ export function createBridge({ token, timeout = 30_000 }) {
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const config = await ensureConfig();
   const { server } = createBridge(config);
-  server.listen(config.port, '127.0.0.1', () => console.log(`Browser Control listening on 127.0.0.1:${config.port}`));
+  server.listen(config.port, '127.0.0.1', () => {
+    // `majapi-browser stop` reads this to end a detached bridge.
+    writeFileSync(pidPath, String(process.pid));
+    console.log(`Browser Control listening on 127.0.0.1:${config.port}`);
+  });
+  const cleanup = () => { rmSync(pidPath, { force: true }); process.exit(0); };
+  process.on('SIGINT', cleanup);
+  process.on('SIGTERM', cleanup);
 }
