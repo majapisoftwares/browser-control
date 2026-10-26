@@ -1,4 +1,6 @@
 <!doctype html><html lang="en"><meta charset="utf-8"><title>Browser Control</title>
-<style>body{font:14px system-ui;min-width:230px;padding:16px}strong{display:block;margin-bottom:12px}</style>
-<strong>Majapi Browser Control</strong><p id="status">Checking connection…</p><p>Automated tabs appear in the <b>AI</b> group.</p>
+<style>body{font:14px system-ui;min-width:260px;max-width:360px;padding:16px}strong{display:block;margin-bottom:12px}#start[hidden]{display:none}code{display:block;padding:8px;border-radius:6px;background:#8881;font:12px ui-monospace,monospace;word-break:break-all;user-select:all}button{margin-top:8px;font:inherit}</style>
+<strong>Majapi Browser Control</strong><p id="status">Checking connection…</p>
+<div id="start" hidden><p>Start the local bridge:</p><code id="command"></code><button id="copy" type="button">Copy</button></div>
+<p>Automated tabs appear in the <b>AI</b> group.</p>
 <script src="popup.js"></script></html>

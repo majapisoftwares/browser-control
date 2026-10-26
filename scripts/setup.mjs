@@ -7,7 +7,8 @@ import { ensureConfig } from '../bridge/config.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const config = await ensureConfig();
-await writeFile(join(root, 'extension/config.local.json'), JSON.stringify(config), { mode: 0o600 });
+// root lets the popup show the exact command that restarts the bridge.
+await writeFile(join(root, 'extension/config.local.json'), JSON.stringify({ ...config, root: root.replace(/[\\/]+$/, '') }), { mode: 0o600 });
 for (const base of ['.agents', '.codex']) {
   const folder = join(homedir(), base, 'skills/browser-control');
   await mkdir(join(folder, 'scripts'), { recursive: true });
