@@ -5,6 +5,7 @@ import { randomBytes } from 'node:crypto';
 
 export const stateDir = process.env.BROWSER_CONTROL_HOME || join(homedir(), '.browser-control');
 export const configPath = join(stateDir, 'config.json');
+export const pidPath = join(stateDir, 'bridge.pid');
 export async function loadConfig() {
   return JSON.parse(await readFile(configPath, 'utf8'));
 }
