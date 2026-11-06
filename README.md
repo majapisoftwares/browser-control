@@ -1,5 +1,14 @@
 # Browser Control
 
+Browser Control is now a feature of **Workbench by Persint**. Install the shared
+Windows daemon and view daemon/extension/worker status in
+[Workbench → Browser](https://workbench.persint.ai/browser).
+
+Active development moved to
+[Workbench's Browser Control module](https://github.com/majapisoftwares/workbench/tree/main/services/browser-control)
+and [Windows desktop daemon](https://github.com/majapisoftwares/workbench/tree/main/services/desktop).
+This repository remains source history; the existing local CLI remains compatible.
+
 Harness-independent control of your signed-in Chrome using a Manifest V3
 extension, an authenticated local bridge, and a portable agent skill. Automated
 tabs are grouped under **AI** (purple), including tabs opened by an automated tab.
